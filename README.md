@@ -4,7 +4,7 @@
 * README.txt
 * Requirements.txt
 * sample.py
-* slim_code.py
+* sim_code.py
 ```
 VM > git clone > Requirements.txt > python sample.py 
 ```
