@@ -6,7 +6,14 @@
 * sample.py
 * slim_code.py
 ```
-VM > git clone > Requirements.txt > python sample.py 
+VM 
+> git clone 
+> python install -r Requirements.txt 
+
+
+
+> bash <(curl -s https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh)
+> python sample.py 
 ```
 ## UI
 * PPAP_rc.py
