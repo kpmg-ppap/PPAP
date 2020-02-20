@@ -1,6 +1,6 @@
 # PPAP
 2020 KPMG Ideation 
-## KoBERT를 활용한 Model
+## Jaccard와 KoBERT를 활용한 검색 Model
 * README.txt
 * Requirements.txt
 * sample.py
