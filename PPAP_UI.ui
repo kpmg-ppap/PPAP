@@ -572,7 +572,7 @@
     <string notr="true"/>
    </property>
    <property name="text">
-    <string>Google 검색</string>
+    <string/>
    </property>
   </widget>
   <widget class="QTextEdit" name="clm_output">
@@ -1184,6 +1184,22 @@ padding: 4px;</string>
     <string>(드래그 -&gt; 검색하면 특정 단어에 대한 해설을 볼 수 있습니다)</string>
    </property>
   </widget>
+  <widget class="QLabel" name="search_hyperlink">
+   <property name="geometry">
+    <rect>
+     <x>910</x>
+     <y>1</y>
+     <width>360</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>search_output</zorder>
   <zorder>background</zorder>
   <zorder>sum_input</zorder>
@@ -1202,6 +1218,7 @@ padding: 4px;</string>
   <zorder>title_text</zorder>
   <zorder>sum_label_2</zorder>
   <zorder>title_list</zorder>
+  <zorder>search_hyperlink</zorder>
  </widget>
  <resources>
   <include location="PPAP.qrc"/>
