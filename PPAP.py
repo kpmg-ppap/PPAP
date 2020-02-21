@@ -35,7 +35,7 @@ class MyWindow(QMainWindow, form_class):
         self.clm_btn.setVisible(False)
         self.clm_input.setTextColor(QColor(0, 0, 0))
 
-        # self.search_btn.clicked.connect(self.search)
+        self.search_btn.clicked.connect(self.search)
         self.search_btn.setVisible(False)
         self.search_output.setVisible(False)
         self.search_hyperlink.setVisible(False)
@@ -44,7 +44,6 @@ class MyWindow(QMainWindow, form_class):
         self.title_btn.clicked.connect(self.title)
         self.title_btn.setVisible(False)
         self.title_text.setTextColor(QColor(100,100,100))
-        self.title_text.setFontPointSize(20)
         self.title_text.insertPlainText("제목 없는 문서")
         self.title_list.setVisible(False)
 
@@ -96,6 +95,8 @@ class MyWindow(QMainWindow, form_class):
         self.clm_input.copy()
 
         if len(QApplication.clipboard().text()) == 0:
+
+
             # 만약 클립보드에 아무것도 없으면 input 박스에 있는 텍스트 전체를 인풋으로 받아라
             text = self.clm_input.toPlainText()
             self.show_output(self.clm_output, text)
@@ -147,7 +148,6 @@ class MyWindow(QMainWindow, form_class):
     def chkItemClicked(self):
         # self.title_text.setBackgroundColor(Qt::blue)
         self.title_text.clear()
-        self.title_text.setFontPointSize(20)
         self.title_text.insertPlainText(self.title_list.currentItem().text())
         self.title_list.setVisible(False)
 

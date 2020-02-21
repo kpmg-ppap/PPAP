@@ -30,7 +30,8 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(158, 161, 161); border-color: rgb(0, 0, 0);</string>
+    <string notr="true">border-color: rgb(0, 0, 0);
+color: rgb(0, 0, 0);</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::Box</enum>
@@ -61,9 +62,9 @@
   <widget class="QPushButton" name="sum_btn">
    <property name="geometry">
     <rect>
-     <x>720</x>
+     <x>730</x>
      <y>360</y>
-     <width>151</width>
+     <width>141</width>
      <height>31</height>
     </rect>
    </property>
@@ -220,14 +221,16 @@
    </property>
    <property name="font">
     <font>
-     <family>Nanum Gothic</family>
-     <pointsize>15</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
+     <family>나눔고딕</family>
+     <pointsize>11</pointsize>
+     <weight>9</weight>
+     <italic>false</italic>
+     <bold>false</bold>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 170, 0);</string>
+    <string notr="true">font: 75 11pt &quot;나눔고딕&quot;;
+background-color: rgb(85, 170, 0);</string>
    </property>
    <property name="text">
     <string>유사 특허 검색</string>
@@ -236,9 +239,9 @@
   <widget class="QPushButton" name="clm_btn">
    <property name="geometry">
     <rect>
-     <x>720</x>
+     <x>730</x>
      <y>630</y>
-     <width>151</width>
+     <width>141</width>
      <height>31</height>
     </rect>
    </property>
@@ -395,14 +398,16 @@
    </property>
    <property name="font">
     <font>
-     <family>Nanum Gothic</family>
-     <pointsize>15</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
+     <family>나눔고딕</family>
+     <pointsize>11</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 106, 101);</string>
+    <string notr="true">background-color: rgb(255, 106, 101);
+font: 11pt &quot;나눔고딕&quot;;</string>
    </property>
    <property name="text">
     <string>유사 청구항 검색</string>
@@ -996,14 +1001,14 @@
    <property name="font">
     <font>
      <family>나눔고딕 12</family>
-     <pointsize>15</pointsize>
+     <pointsize>12</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 15pt &quot;나눔고딕&quot; bold;
+    <string notr="true">font: 12pt &quot;나눔고딕&quot; bold;
 color: rgb(255, 255, 255);
 background-color: rgb(61, 117, 208);
 border-style: outset;
@@ -1018,11 +1023,15 @@ padding: 4px;</string>
   <widget class="QTextEdit" name="title_text">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>0</y>
+     <x>68</x>
+     <y>3</y>
      <width>691</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 12pt &quot;나눔고딕&quot;;
+color: rgb(103, 103, 103);</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::NoFrame</enum>
@@ -1058,7 +1067,7 @@ padding: 4px;</string>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(158, 161, 161); border-color: rgb(0, 0, 0);</string>
+    <string notr="true">border-color: rgb(0, 0, 0);</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::Box</enum>
@@ -1072,6 +1081,9 @@ padding: 4px;</string>
      <width>361</width>
      <height>251</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QTextEdit" name="search_output">
