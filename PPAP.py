@@ -25,17 +25,15 @@ class MyWindow(QMainWindow, form_class):
         self.sum_input.setTextColor(QColor(0, 0, 0))
         self.sum_input.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
-        # create context menu
-        self.popMenu = QtWidgets.QMenu(self)
-        self.popMenu.addAction(QAction('search word'+' Google 검색', self))
-        self.popMenu.addAction(QAction('특허 용례 검색', self))
+        self.sum_input.installEventFilter(self)
         # self.popMenu.addSeparator()
 
         self.clm_btn.clicked.connect(self.claim)
         self.clm_btn.setVisible(False)
         self.clm_input.setTextColor(QColor(0, 0, 0))
+        self.clm_input.installEventFilter(self)
 
-        self.search_btn.clicked.connect(self.search)
+        # self.search_btn.clicked.connect(self.search)
         self.search_btn.setVisible(False)
         self.search_output.setVisible(False)
         self.search_hyperlink.setVisible(False)
@@ -46,6 +44,22 @@ class MyWindow(QMainWindow, form_class):
         self.title_text.setTextColor(QColor(100,100,100))
         self.title_text.insertPlainText("제목 없는 문서")
         self.title_list.setVisible(False)
+
+    def eventFilter(self, obj, event):
+        if event.type() == QtCore.QEvent.MouseButtonPress:
+            if event.button() == QtCore.Qt.LeftButton:
+                pass
+            elif event.button() == QtCore.Qt.RightButton:
+                print(obj.objectName(), "Right click")
+                # create context menu
+                self.sum_input.copy()
+                self.popMenu = QtWidgets.QMenu(self)
+                self.popMenu.addAction(QAction('"' + QApplication.clipboard().text() + '" Google 검색', self))
+                self.popMenu.addAction(QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self))
+                self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
+            elif event.button() == QtCore.Qt.MiddleButton:
+                pass
+        return QtCore.QObject.event(obj, event)
 
     def show_output(self, where, what):
         where.clear()
