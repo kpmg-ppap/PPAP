@@ -3,6 +3,8 @@ from PyQt5.Qt import *
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import uic
+from PyQt5 import QtGui
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QDesktopServices
 # from PyQt5.QtCore import QUrl
@@ -21,6 +23,13 @@ class MyWindow(QMainWindow, form_class):
 
         self.sum_btn.clicked.connect(self.summary)
         self.sum_input.setTextColor(QColor(0, 0, 0))
+        self.sum_input.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
+        # create context menu
+        self.popMenu = QtWidgets.QMenu(self)
+        self.popMenu.addAction(QAction('search word'+' Google 검색', self))
+        self.popMenu.addAction(QAction('특허 용례 검색', self))
+        # self.popMenu.addSeparator()
 
         self.clm_btn.clicked.connect(self.claim)
         self.clm_btn.setVisible(False)
@@ -39,15 +48,21 @@ class MyWindow(QMainWindow, form_class):
         self.title_text.insertPlainText("제목 없는 문서")
         self.title_list.setVisible(False)
 
-    def link(self, linkStr):
-        QDesktopServices.openUrl(QUrl(linkStr))
-
     def show_output(self, where, what):
         where.clear()
         where.insertPlainText("[검색 텍스트]")
         where.append(what)
         where.append("")
+        where.insertPlainText("[검색 결과]")
         where.append("")
+
+    def on_context_menu(self, point):
+        # show context menu
+        self.popMenu.exec_(self.sum_input.mapToGlobal(point))
+
+    def link(self, linkStr):
+        QDesktopServices.openUrl(QUrl(linkStr))
+
 
     def summary(self):
         QApplication.clipboard().clear()
@@ -74,7 +89,6 @@ class MyWindow(QMainWindow, form_class):
             self.sum_input.moveCursor(QTextCursor.Right)
             self.sum_input.setTextBackgroundColor(QColor(255, 255, 255))
             QApplication.clipboard().clear()
-
     def claim(self):
         QApplication.clipboard().clear()
 
@@ -101,15 +115,11 @@ class MyWindow(QMainWindow, form_class):
             self.clm_input.setTextBackgroundColor(QColor(255, 255, 255))
             QApplication.clipboard().clear()
 
-
     def search(self, keyword):
         # google search
         self.search_hyperlink.setVisible(True)
         self.search_keyword = keyword
         self.search_hyperlink.setText('<a href="http://www.google.com/search?q='+ self.search_keyword +'">"'+ self.search_keyword +'" Google 검색</a>')
-
-    def show_search_result(self):
-        pass
 
     def reset(self):
         clm_original = self.clm_input.toPlainText()
