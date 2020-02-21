@@ -45,21 +45,55 @@
 * Requirements.txt
 * sim_code.py
 * sample.py
-```
+
+### Installation
+Ref
+* [윈도우10 CMD 한글 깨짐 방지](https://extrememanual.net/12502)
+* [윈도우 python3.X MeCab 설치](https://cleancode-ws.tistory.com/97)
 VM 
+* Azure Window 10
+* python version = 3.6.6
+```
 # KoBERT 
-> https://github.com/SKTBrain/KoBERT.git
+> git clone https://github.com/SKTBrain/KoBERT.git
 > cd KoBERT
 > pip install -r requirements.txt
 > pip install .
 
-# mecab
-> bash <(curl -s https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh)
+# MeCab
+# move mecab file to C:\ directory
+[directory] "C:\mecab"
+> pip install mecab_python-0.996_ko_0.9.2_msvc-cp36-cp36m-win_amd64.whl
+(> chcp 949) # CMD 한글 깨짐 방지
+# test code
+>>> import MeCab
+>>> m = MeCab.Tagger()
+>>> out = m.parse("행복한 변리사를 위한 서비스 PPAP 입니다.")
+>>> print(out)
+행복    NNG,정적사태,T,행복,*,*,*,*
+한      XSA+ETM,*,T,한,Inflect,XSA,ETM,하/XSA/*+ᆫ/ETM/*
+변리사  NNG,*,F,변리사,Compound,*,*,변리/NNG/*+사/NNG/*
+를      JKO,*,T,를,*,*,*,*
+위한    VV+ETM,*,T,위한,Inflect,VV,ETM,위하/VV/*+ᆫ/ETM/*
+서비스  NNG,*,F,서비스,*,*,*,*
+PPAP    SL,*,*,*,*,*,*,*
+입니다  VCP+EF,*,F,입니다,Inflect,VCP,EF,이/VCP/*+ᄇ니다/EF/*
+.       SF,*,*,*,*,*,*,*
+EOS
+
 
 # Our Model
 > git clone 
+# move all files to KoBERT file
+[directory] "./KoBERT"
 > python install -r Requirements.txt 
+(> pip install mxnet)
+(> pip install torch==1.4.0+cpu torchvision==0.5.0+cpu -f https://download.pytorch.org/whl/torch_stable.html)
+(> pip install gluonnlp)
+(> pip install transformers)
+(> pip install scikit-learn)
 > python sample.py 
+
 
 ```
 ## UI
