@@ -1,6 +1,10 @@
 # PPAP: Patent Process Accelerating Program
 2020 KPMG Ideation 
 
+<p align="center">
+    <image src="https://github.com/kpmg-ppap/PPAP/blob/master/img/sketch.png" width="700"><br/>
+    <i>A sketch on our idea</i>
+
 ## 문서 유사도 측정을 활용한 (a) 유사 문건 검색 및 (b) 청구항 작성 보조
 
 ### 1. 발명자의 발명제안서 및 특허요약 취득
@@ -42,7 +46,13 @@
 
 - **문서 간 비교**: 문장과 문장의 비교는 어느 정도 길이가 제한되어 길이에 따른 bias가 덜하지만, 문장과 문서의 비교, 혹은 문서와 문서의 비교는 문서의 길이가 결과에 영향을 미칠 수 있음. 따라서 이 경우, 양 문서를 모두 문장 단위로 split한 후, 각 문장과 문장을 모두 비교하여 합함. 다만, 이 때 특정 threshold를 넘지 않는 similarity를 보이는 두 문장은 관계가 적은 것으로 판단하여 평균을 내는 곳에서 제함. 이 과정에서 threshold를 어떻게 잡을 것인가에 대한 논의가 있을 수 있는데, 문서들마다 '유사함'을 파악할 만한 요소들이 다를 수 있으므로, 앞서 논한 fixed Jaccard distance (FJ)를 그 대상으로 삼음. 즉, 간단하게는 PCD > FJD 인 경우의 문장 쌍만을 평균 산정에 고려함. 즉, 여기에서는, 특허 문서에서 의미적 유사도가 어휘적 유사도에 많이 영향받는다는 사실을 활용함.
 
+## Demonstration을 위한 데이터베이스
 
+- 특허문서 검색을 통해, 기 특허 중 '컴퓨터 비전', '자율주행', '의료', '자율주행 및 비전', '의료영상' 각 분야의 특허 문건을 총 118건 수집함. 이 과정에서, 각 분야의 문건이 골고루 수집될 수 있도록 함
+
+- 해당 문건들에서 '제목', '요약', 그리고 '청구항'을 추출하여 DB화함. 이 DB는 확장 가능하며, 추후 최적화를 위해 통계 및 표현 정보가 모두 수치화되어 저장될 수 있는 구조임 (tokenizing, token 정보들, KoBERT 레이어 표현)
+
+- 후술하듯, random_sample 함수를 통해, 이 중 한 건의 특허를 임의로 골라 해당 문건의 요약을 input으로 하여, 요약이 유사한 문건 top 5개를 고를 수 있고, 그 5개 문건의 청구항들 중에서 input으로 들어오는 청구항에 참고할 만한 부분들을 반환해 줄 수 있음
 
 ## 기술적 구성
 * README.txt
@@ -85,7 +95,6 @@ PPAP    SL,*,*,*,*,*,*,*
 .       SF,*,*,*,*,*,*,*
 EOS
 
-
 # Our Model
 > git clone 
 # move all files to KoBERT file
@@ -96,10 +105,13 @@ EOS
 (> pip install gluonnlp)
 (> pip install transformers)
 (> pip install scikit-learn)
-> python sample.py 
 
-
+# Demonstration
+Python 실행
+> from sample import random_sample
+> random_sample(is_print = True)
 ```
+
 ## UI
 * PPAP_rc.py
 * PPAP_UI.py
