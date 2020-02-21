@@ -2,7 +2,7 @@
 2020 KPMG Ideation 
 
 <p align="center">
-    <image src="https://github.com/kpmg-ppap/PPAP/blob/master/img/sketch.png" width="700"><br/>
+    <image src="https://github.com/kpmg-ppap/PPAP/blob/master/img/sketch.png" width="800"><br/>
     <i>A sketch on our idea</i>
 
 ## 문서 유사도 측정을 활용한 (a) 유사 문건 검색 및 (b) 청구항 작성 보조
@@ -22,6 +22,12 @@
 - 포털 검색으로 연결하는 링크를 반환하고 
 
 - 기존 특허 문건에서의 용례들을 탐색함
+
+<p align="center">
+    <image src="https://github.com/kpmg-ppap/PPAP/blob/master/img/program.png" width="800"><br/>
+    <i>A sketch on our idea</i>
+
+# 기술 구현
 
 ## 한국어 형태소 분석
 빠르고 정확한 MeCab 한국어 형태소 분석기의 사용으로, 별도의 훈련 없이도 한국어의 어휘 분석을 용이하게 진행함. Functional particle들이 크게 영향을 미치지 않는 토픽 위주 특허 분석의 성질을 고려하여, noun pharse와 verb form에 해당하는 토큰들을 남겨서 어휘적 유사도를 측정함. 해당 분석기 및 관심 품사들은 아래 링크에서 참고
@@ -54,7 +60,7 @@
 
 - 후술하듯, random_sample 함수를 통해, 이 중 한 건의 특허를 임의로 골라 해당 문건의 요약을 input으로 하여, 요약이 유사한 문건 top 5개를 고를 수 있고, 그 5개 문건의 청구항들 중에서 input으로 들어오는 청구항에 참고할 만한 부분들을 반환해 줄 수 있음
 
-## 기술적 구성
+## 배포 
 * README.txt
 * Requirements.txt
 * sim_code.py
