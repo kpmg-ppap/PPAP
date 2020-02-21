@@ -64,15 +64,13 @@ class MyWindow(QMainWindow, form_class):
                 else:
                     self.popMenu = QtWidgets.QMenu(self)
                     self.popMenu.clear()
-                    google_search = QAction('"' + QApplication.clipboard().text() + '" Google 검색', self)
-                    patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
-                    self.popMenu.addAction(google_search)
+                    self.google_search = QAction('"' + QApplication.clipboard().text() + '" Google 검색', self)
+                    self.patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
+                    self.popMenu.addAction(self.google_search)
                     # self.search(QApplication.clipboard().text())
-                    self.popMenu.addAction(patent_search)
-                    google_search.triggered.connect(self.__copy)
-                    # patent_search.triggered.connect(print("wow"))
-                    def __copy(self):
-                        print("복사...")
+                    self.popMenu.addAction(self.patent_search)
+                    # self.google_search.triggered.connect(print("yay"))
+                    self.patent_search.triggered.connect(print("wow"))
                     self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
                     #search(QApplication.clipboard().text())
 
