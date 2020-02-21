@@ -47,16 +47,35 @@ class MyWindow(QMainWindow, form_class):
 
     def eventFilter(self, obj, event):
         if event.type() == QtCore.QEvent.MouseButtonPress:
+
+            QApplication.clipboard().clear()
+
             if event.button() == QtCore.Qt.LeftButton:
                 pass
             elif event.button() == QtCore.Qt.RightButton:
-                print(obj.objectName(), "Right click")
+                #print(obj.objectName(), "Right click")
                 # create context menu
                 self.sum_input.copy()
-                self.popMenu = QtWidgets.QMenu(self)
-                self.popMenu.addAction(QAction('"' + QApplication.clipboard().text() + '" Google 검색', self))
-                self.popMenu.addAction(QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self))
-                self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
+                if len(QApplication.clipboard().text()) == 0 :
+                    self.popMenu = QtWidgets.QMenu(self)
+                    self.popMenu.clear()
+                    self.popMenu.addAction(QAction('(empty)', self))
+
+                else:
+                    self.popMenu = QtWidgets.QMenu(self)
+                    self.popMenu.clear()
+                    google_search = QAction('"' + QApplication.clipboard().text() + '" Google 검색', self)
+                    patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
+                    self.popMenu.addAction(google_search)
+                    # self.search(QApplication.clipboard().text())
+                    self.popMenu.addAction(patent_search)
+                    google_search.triggered.connect(self.__copy)
+                    # patent_search.triggered.connect(print("wow"))
+                    def __copy(self):
+                        print("복사...")
+                    self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
+                    #search(QApplication.clipboard().text())
+
             elif event.button() == QtCore.Qt.MiddleButton:
                 pass
         return QtCore.QObject.event(obj, event)
