@@ -6,7 +6,7 @@ from kobert.pytorch_kobert import get_pytorch_kobert_model
 from kobert.utils import get_tokenizer
 from sklearn.metrics.pairwise import cosine_similarity as cos_sim
 
-from mecab import Tagger
+from MeCab import Tagger
 tagger = Tagger()
 
 bertmodel, vocab = get_pytorch_kobert_model()
@@ -37,12 +37,28 @@ set_of_interest = ['NNG', 'NNP', 'NNB', 'NR', 'NP', 'VV', 'VA', 'VX', 'VCP', 'VC
 ## topic of the source document is not far behind the topic of the input
 
 def fixed_jaccard(source,target):
+    '''
+    Input: Source (DB) and Target (input) Documents
+    Output: Fixed Jaccard Similarity 
+    '''
     source = tagger.parse(source)
-    target = tagger.parse(target)
+    source = source[:-5].split('\n')
+    source = [z.split('\t') for z in source]
+    source = [z for z in source]
     source_mor = [z[0] for z in source]
+    source_tag = [z[1] for z in source]
+    source_tag = [z.split(',') for z in source_tag]
+    source_tag = [z[0] for z in source_tag]
+    #-------------------source---------------------------
+    target = tagger.parse(target)
+    target = target[:-5].split('\n')
+    target = [z.split('\t') for z in target]
+    target = [z for z in target]
     target_mor = [z[0] for z in target]
-    source_tag = [z[1].split(',')[0] for z in source]
-    target_tag = [z[1].split(',')[0] for z in target]
+    target_tag = [z[1] for z in target]
+    target_tag = [z.split(',') for z in target_tag]
+    target_tag = [z[0] for z in target_tag]
+    #--------------------target------------------------------
     source_ind = [z in set_of_interest for z in source_tag]
     target_ind = [z in set_of_interest for z in target_tag]
     source_eff = []
@@ -62,12 +78,34 @@ def fixed_jaccard(source,target):
 ## regarding each element are multiplied and summed
 
 def fixed_freq_jaccard(source,target):
+    '''
+    Input: Source (DB) and Target (input) Documents
+    Output: Fixed Freq Jaccard Similarity 
+    '''
+    # source = tagger.parse(source).split('\n')
+    # target = tagger.parse(target).split('\n')
+    # source_mor = [z.split('\t')[0] for z in source]
+    # target_mor = [z.split('\t')[0] for z in target]
+    # source_tag = [z.split('\t')[1].split(',')[0] for z in source]
+    # target_tag = [z.split('\t')[1].split(',')[0] for z in target]
     source = tagger.parse(source)
-    target = tagger.parse(target)
+    source = source[:-5].split('\n')
+    source = [z.split('\t') for z in source]
+    source = [z for z in source]
     source_mor = [z[0] for z in source]
+    source_tag = [z[1] for z in source]
+    source_tag = [z.split(',') for z in source_tag]
+    source_tag = [z[0] for z in source_tag]
+    #-----------------------source------------------------------
+    target = tagger.parse(target)
+    target = target[:-5].split('\n')
+    target = [z.split('\t') for z in target]
+    target = [z for z in target]
     target_mor = [z[0] for z in target]
-    source_tag = [z[1].split(',')[0] for z in source]
-    target_tag = [z[1].split(',')[0] for z in target]
+    target_tag = [z[1] for z in target]
+    target_tag = [z.split(',') for z in target_tag]
+    target_tag = [z[0] for z in target_tag]
+    #--------------------target------------------------------
     source_ind = [z in set_of_interest for z in source_tag]
     target_ind = [z in set_of_interest for z in target_tag]
     source_eff = []
@@ -94,6 +132,10 @@ def fixed_freq_jaccard(source,target):
 ## via [CLS] output of KoBERT
 
 def compare_sentences(s1,s2):
+    '''
+    Input: Two sentence/documents
+    Output: Cosine similarity of Two [CLS] vectors of BERT(s1) and BERT(s2)
+    '''
     z1 = transform_tok(s1)[0]
     z2 = transform_tok(s2)[0]
     res = cos_sim([z1],[z2])
@@ -102,13 +144,18 @@ def compare_sentences(s1,s2):
 ## Comparing two documents, sentence by sentence
 ## Sentences can be either phrase or clause, split by ;,.
 ## Threshold is calculated by fixed_jaccard and used to choose the sentence pairs with sufficient similarity
-## fixed_freq_jaccard is multiflied to the final result and returned
+## fixed_freq_jaccard is multiplied to the final result 
+## fixed_freq_jaccard(source,target) is divided with fixed_freq_jaccard(target,target) which is the largest possible one
 
 def compare_document(source,target):
+    '''
+    Input: Two documents
+    Output: Document-level similarity, computed with averaging compare_sentences via Jaccard threshold
+    '''
     thres = fixed_jaccard(source,target)
     thres_freq = fixed_freq_jaccard(source,target)
-    d1 = re.split(r'[;,.]\s*', source)[:-1]
-    d2 = re.split(r'[;,.]\s*', target)[:-1]
+    d1 = re.split(r'[;,.]\s*', source)[:-2]
+    d2 = re.split(r'[;,.]\s*', target)[:-2]
     sum = 0
     count = 0
     for i in range(len(d1)):
@@ -120,12 +167,72 @@ def compare_document(source,target):
     sum = sum / np.maximum(1,count)
     return sum*thres_freq, thres_freq
 
-## Find the most similar document in the DB
+## Find top n most semantically/lexically similar document in the DB
 
-def find_in_doc(source_docs,target):
+def find_in_doc_demo(source_docs,target,num_cand=1):
     scores = [compare_document(z,target)[0] for z in source_docs]
     for i in range(len(scores)):
         print(i, "th document with SIMILARITY: ", scores[i], " / CONTENT: ", source_docs[i], '\n')
     answer = source_docs[np.argmax(scores)]		
     print(answer, "\n\n is the MOST SIMILAR TO: \n\n", target)
-    return answer
+    arg_scores = np.argsort(scores)
+    cands      = [source_docs[int(z)] for z in arg_scores[-num_cand:]]
+    return list(reversed(cands))
+
+## find_in_doc only returns the result, not printing
+
+def find_in_doc(source_titles,source_docs,source_claims,target,num_cand=1):
+    '''
+    Input: Titles, Abstracts, and Claims of DB, and Input abstract
+    Output: Titles, Abstracts, and Claims of n similar-abstract documents
+    '''
+    sem_scores = [float(compare_document(str(z),str(target))[0]) for z in source_docs]
+    lex_scores = [float(compare_document(str(z),str(target))[1]) for z in source_docs]
+    sem_arg_scores = np.argsort(sem_scores)
+    lex_arg_scores = np.argsort(lex_scores)
+    sem_titles      = [source_titles[int(z)] for z in sem_arg_scores[-num_cand:]]
+    lex_titles      = [source_titles[int(z)] for z in lex_arg_scores[-num_cand:]]
+    sem_cands      = [source_docs[int(z)] for z in sem_arg_scores[-num_cand:]]
+    lex_cands      = [source_docs[int(z)] for z in lex_arg_scores[-num_cand:]]
+    sem_claims     = [source_claims[int(z)] for z in sem_arg_scores[-num_cand:]]
+    lex_claims     = [source_claims[int(z)] for z in lex_arg_scores[-num_cand:]]
+    return list(reversed(sem_titles)), list(reversed(lex_titles)), list(reversed(sem_cands)), list(reversed(lex_cands)), list(reversed(sem_claims)), list(reversed(lex_claims))    
+
+## Search the claims of the candidates to prevent overlap
+## First, split the claim into sentences
+## Then, search among the claims that best fit the given claim
+
+def find_one_claim(source_docs,target,num_cand=1):
+    '''
+    Input: a list of DB claims and an input claim
+    Output: The most similar claim
+    '''
+    scores = [compare_document(z,target)[0] for z in source_docs]	
+    arg_scores = np.argsort(scores)
+    cands      = [source_docs[int(z)] for z in arg_scores[-num_cand:]]
+    return cands
+
+def find_claim(source,target):
+    '''
+    Input: a list of DB claims, and a list of input claims
+    Output: a list of candidate claims
+    '''
+    target_claims = target.split('청구항')
+    count = 0
+    for i in range(len(target_claims)):
+        if len(target_claims[count]) < 10:
+            target_claims.pop(count)
+            count -= 1
+        count += 1
+    source_claims_list = ' '.join(source).split('청구항')
+    count = 0
+    for i in range(len(source_claims_list)):
+        if len(source_claims_list[count]) < 10:
+            source_claims_list.pop(count)
+            count -= 1
+        count +=1
+    target_target = []
+    for i in range(len(target_claims)):
+        target_target.append(['----------------\n'+target_claims[i]+'\n is similar to: '])
+        target_target.append(find_one_claim(source_claims_list,target_claims[i]))     
+    return sum(target_target,[])
