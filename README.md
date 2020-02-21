@@ -3,7 +3,7 @@
 
 <p align="center">
     <image src="https://github.com/kpmg-ppap/PPAP/blob/master/img/sketch.png" width="800"><br/>
-    <i>아이디어 </i>
+    <i>아이디어 스케치</i>
 
 ## 문서 유사도 측정을 활용한 (a) 유사 문건 검색 및 (b) 청구항 작성 보조
 
