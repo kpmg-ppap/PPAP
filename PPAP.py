@@ -25,15 +25,13 @@ class MyWindow(QMainWindow, form_class):
         self.sum_input.setTextColor(QColor(0, 0, 0))
         self.sum_input.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
-        # create context menu
-        self.popMenu = QtWidgets.QMenu(self)
-        self.popMenu.addAction(QAction('search word'+' Google 검색', self))
-        self.popMenu.addAction(QAction('특허 용례 검색', self))
+        self.sum_input.installEventFilter(self)
         # self.popMenu.addSeparator()
 
         self.clm_btn.clicked.connect(self.claim)
         self.clm_btn.setVisible(False)
         self.clm_input.setTextColor(QColor(0, 0, 0))
+        self.clm_input.installEventFilter(self)
 
         # self.search_btn.clicked.connect(self.search)
         self.search_btn.setVisible(False)
@@ -44,9 +42,47 @@ class MyWindow(QMainWindow, form_class):
         self.title_btn.clicked.connect(self.title)
         self.title_btn.setVisible(False)
         self.title_text.setTextColor(QColor(100,100,100))
-        self.title_text.setFontPointSize(20)
         self.title_text.insertPlainText("제목 없는 문서")
         self.title_list.setVisible(False)
+
+    def eventFilter(self, obj, event):
+        if event.type() == QtCore.QEvent.MouseButtonPress:
+
+            QApplication.clipboard().clear()
+
+            if event.button() == QtCore.Qt.LeftButton:
+                pass
+            elif event.button() == QtCore.Qt.RightButton:
+                #print(obj.objectName(), "Right click")
+                # create context menu
+                self.sum_input.copy()
+                if len(QApplication.clipboard().text()) == 0 :
+                    self.popMenu = QtWidgets.QMenu(self)
+                    self.popMenu.clear()
+                    self.popMenu.addAction(QAction('(empty)', self))
+
+                else:
+                    self.popMenu = QtWidgets.QMenu(self)
+                    self.popMenu.clear()
+                    google_search = QAction('"' + QApplication.clipboard().text() + '" Google 검색', self)
+                    patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
+                    self.popMenu.addAction(google_search)
+                    self.popMenu.addAction(patent_search)
+                    action = self.popMenu.exec_(self.mapToGlobal(event.pos()))
+                    self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
+                    if action == google_search:
+                        self.search(QApplication.clipboard().text())
+                    elif action == patent_search:
+                        print("copy...")
+
+
+            elif event.button() == QtCore.Qt.MiddleButton:
+                pass
+        return QtCore.QObject.event(obj, event)
+
+    def on_context_menu(self, point):
+        # show context menu
+        return self.sum_input.mapToGlobal(point)
 
     def show_output(self, where, what):
         where.clear()
@@ -55,10 +91,6 @@ class MyWindow(QMainWindow, form_class):
         where.append("")
         where.insertPlainText("[검색 결과]")
         where.append("")
-
-    def on_context_menu(self, point):
-        # show context menu
-        self.popMenu.exec_(self.sum_input.mapToGlobal(point))
 
     def link(self, linkStr):
         QDesktopServices.openUrl(QUrl(linkStr))
@@ -96,6 +128,8 @@ class MyWindow(QMainWindow, form_class):
         self.clm_input.copy()
 
         if len(QApplication.clipboard().text()) == 0:
+
+
             # 만약 클립보드에 아무것도 없으면 input 박스에 있는 텍스트 전체를 인풋으로 받아라
             text = self.clm_input.toPlainText()
             self.show_output(self.clm_output, text)
@@ -147,7 +181,6 @@ class MyWindow(QMainWindow, form_class):
     def chkItemClicked(self):
         # self.title_text.setBackgroundColor(Qt::blue)
         self.title_text.clear()
-        self.title_text.setFontPointSize(20)
         self.title_text.insertPlainText(self.title_list.currentItem().text())
         self.title_list.setVisible(False)
 
