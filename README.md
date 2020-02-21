@@ -1,4 +1,4 @@
-# PPAP: Patent Process Acceleration Program
+# PPAP: Patent Process Accelerating Program
 2020 KPMG Ideation 
 
 ## 문서 유사도 측정을 활용한 (a) 유사 문건 검색 및 (b) 청구항 작성 보조
