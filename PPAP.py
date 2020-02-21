@@ -64,19 +64,24 @@ class MyWindow(QMainWindow, form_class):
                 else:
                     self.popMenu = QtWidgets.QMenu(self)
                     self.popMenu.clear()
-                    self.google_search = QAction('"' + QApplication.clipboard().text() + '" Google 검색', self)
-                    self.patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
-                    self.popMenu.addAction(self.google_search)
-                    # self.search(QApplication.clipboard().text())
-                    self.popMenu.addAction(self.patent_search)
-                    # self.google_search.triggered.connect(print("yay"))
-                    self.patent_search.triggered.connect(print("wow"))
+                    # google_search = QAction('"' + QApplication.clipboard().text() + '" Google 검색', self)
+                    google_search = QAction('<a href="http://www.google.com/search?q='+"YAP" +'">"'+ "YAP" +'" Google 검색</a>', self)
+                    patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
+                    self.popMenu.addAction(google_search)
+                    self.popMenu.addAction(patent_search)
                     self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
-                    #search(QApplication.clipboard().text())
-
+                    action = self.popMenu.exec_(self.sum_input.mapToGlobal(event.pos()))
+                    if action == google_search:
+                        self.search(QApplication.clipboard().text())
+                    elif action == patent_search:
+                        print("copy...")
             elif event.button() == QtCore.Qt.MiddleButton:
                 pass
         return QtCore.QObject.event(obj, event)
+
+    def on_context_menu(self, point):
+        # show context menu
+        self.popMenu.exec_(self.sum_input.mapToGlobal(point))
 
     def show_output(self, where, what):
         where.clear()
@@ -85,10 +90,6 @@ class MyWindow(QMainWindow, form_class):
         where.append("")
         where.insertPlainText("[검색 결과]")
         where.append("")
-
-    def on_context_menu(self, point):
-        # show context menu
-        self.popMenu.exec_(self.sum_input.mapToGlobal(point))
 
     def link(self, linkStr):
         QDesktopServices.openUrl(QUrl(linkStr))
