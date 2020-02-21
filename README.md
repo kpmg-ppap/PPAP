@@ -3,7 +3,7 @@
 
 <p align="center">
     <image src="https://github.com/kpmg-ppap/PPAP/blob/master/img/sketch.png" width="800"><br/>
-    <i>A sketch on our idea</i>
+    <i>아이디어 </i>
 
 ## 문서 유사도 측정을 활용한 (a) 유사 문건 검색 및 (b) 청구항 작성 보조
 
@@ -24,8 +24,8 @@
 - 기존 특허 문건에서의 용례들을 탐색함
 
 <p align="center">
-    <image src="https://github.com/kpmg-ppap/PPAP/blob/master/img/program.png" width="800"><br/>
-    <i>A sketch on our idea</i>
+    <image src="https://github.com/kpmg-ppap/PPAP/blob/master/img/program.png" width="900"><br/>
+    <i>UI (PPAP.py) 실행 화면</i>
 
 # 기술 구현
 
