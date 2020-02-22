@@ -72,7 +72,7 @@ Ref
 * [윈도우 python3.X MeCab 설치](https://cleancode-ws.tistory.com/97)
 VM 
 * Azure Window 10
-* python version = 3.6.6
+* Python version == 3.6.6
 ```
 ## KoBERT 
 > git clone https://github.com/SKTBrain/KoBERT.git
@@ -127,3 +127,9 @@ Python 실행
 
 ## Analysis
 * analysis.pptx
+
+## TODO
+* 대량의 DB확보 및 테스트베드 구축
+* 실제 유사 특허 DB 기반의 fine-tuning
+* 제목 추천 구현 (abstract를 요약!)
+* PDF 반환 기능 추가
