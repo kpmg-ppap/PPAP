@@ -7,12 +7,13 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QDesktopServices
-# from PyQt5.QtCore import QUrl
-# from PyQt5.QtWebEngineWidgets import QWebEngineView
-
+from sample import find_similar
+from sim_code import find_claim
+from sim_code import find_term_show
 
 #UI파일은 Python 코드 파일과 같은 디렉토리에 위치
 form_class = uic.loadUiType("PPAP_UI.ui")[0]
+global_claim = []
 
 class MyWindow(QMainWindow, form_class):
 
@@ -33,8 +34,12 @@ class MyWindow(QMainWindow, form_class):
         self.clm_input.setTextColor(QColor(0, 0, 0))
         self.clm_input.installEventFilter(self)
 
-        # self.search_btn.clicked.connect(self.search)
+        self.sum_output.installEventFilter(self)
+        self.clm_output.installEventFilter(self)
+
+        self.search_btn.clicked.connect(self.search)
         self.search_btn.setVisible(False)
+        self.search_out_label.setVisible(False)
         self.search_output.setVisible(False)
         self.search_hyperlink.setVisible(False)
         self.reset_btn.clicked.connect(self.reset)
@@ -57,10 +62,86 @@ class MyWindow(QMainWindow, form_class):
                 # create context menu
                 self.sum_input.copy()
                 if len(QApplication.clipboard().text()) == 0 :
-                    self.popMenu = QtWidgets.QMenu(self)
-                    self.popMenu.clear()
-                    self.popMenu.addAction(QAction('(empty)', self))
+                    self.clm_input.copy()
+                    if len(QApplication.clipboard().text()) == 0 :
+                        self.sum_output.copy()
+                        if len(QApplication.clipboard().text()) == 0 :
+                            self.clm_output.copy()
+                            if len(QApplication.clipboard().text()) == 0 :
+                                self.popMenu = QtWidgets.QMenu(self)
+                                self.popMenu.clear()
+                                self.popMenu.addAction(QAction('(empty)', self))    
 
+                            else:
+                                self.popMenu = QtWidgets.QMenu(self)
+                                self.popMenu.clear()
+                                google_search = QAction('"' + QApplication.clipboard().text() + '" Google 검색', self)
+                                patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
+                                self.popMenu.addAction(google_search)
+                                self.popMenu.addAction(patent_search)
+                                self.clm_output.customContextMenuRequested.connect(self.on_context_menu)
+                                action = self.popMenu.exec_(self.clm_output.mapToGlobal(event.pos()))
+
+                                if action == google_search:
+                                    self.search(QApplication.clipboard().text())
+                                    self.clm_output.moveCursor(QTextCursor.Right)
+                                elif action == patent_search:
+                                    #self.search_btn.setVisible(True)
+                                    self.search_out_label.setVisible(True)
+                                    self.search_output.setVisible(True)
+                                    text = QApplication.clipboard().text()
+                                    output = find_term_show(global_claim,target,text)
+                                    self.show_output(self.search_output, text,('\n\n').join(output))
+                                    self.search(text)
+                                    self.clm_output.moveCursor(QTextCursor.Right)
+                                    QApplication.clipboard().clear()
+  
+                        else:
+                            self.popMenu = QtWidgets.QMenu(self)
+                            self.popMenu.clear()
+                            google_search = QAction('"' + QApplication.clipboard().text() + '" Google 검색', self)
+                            patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
+                            self.popMenu.addAction(google_search)
+                            self.popMenu.addAction(patent_search)
+                            self.sum_output.customContextMenuRequested.connect(self.on_context_menu)
+                            action = self.popMenu.exec_(self.sum_output.mapToGlobal(event.pos()))
+
+                            if action == google_search:
+                                self.search(QApplication.clipboard().text())
+                                self.sum_output.moveCursor(QTextCursor.Right)
+                            elif action == patent_search:
+                                #self.search_btn.setVisible(True)
+                                self.search_output.setVisible(True)
+                                text = QApplication.clipboard().text()
+                                output = find_term_show(global_claim,target,text)
+                                self.show_output(self.search_output, text,('\n\n').join(output))
+                                self.search(text)
+                                self.sum_output.moveCursor(QTextCursor.Right)
+                                QApplication.clipboard().clear()
+
+                    else:
+                        self.popMenu = QtWidgets.QMenu(self)
+                        self.popMenu.clear()
+                        google_search = QAction('"' + QApplication.clipboard().text() + '" Google 검색', self)
+                        patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
+                        self.popMenu.addAction(google_search)
+                        self.popMenu.addAction(patent_search)
+                        self.clm_input.customContextMenuRequested.connect(self.on_context_menu)
+                        action = self.popMenu.exec_(self.clm_input.mapToGlobal(event.pos()))
+
+                        if action == google_search:
+                            self.search(QApplication.clipboard().text())
+                        elif action == patent_search:
+                            #self.search_btn.setVisible(True)
+                            self.search_out_label.setVisible(True)
+                            self.search_output.setVisible(True)
+                            text = QApplication.clipboard().text()
+                            output = find_term_show(global_claim,target,text)
+                            self.show_output(self.search_output, text,('\n\n').join(output))
+                            self.search(text)
+                            self.clm_input.moveCursor(QTextCursor.Right)
+                            QApplication.clipboard().clear()
+                        
                 else:
                     self.popMenu = QtWidgets.QMenu(self)
                     self.popMenu.clear()
@@ -68,35 +149,50 @@ class MyWindow(QMainWindow, form_class):
                     patent_search = QAction('"' + QApplication.clipboard().text() + '" 특허 용례 검색', self)
                     self.popMenu.addAction(google_search)
                     self.popMenu.addAction(patent_search)
-                    action = self.popMenu.exec_(self.mapToGlobal(event.pos()))
                     self.sum_input.customContextMenuRequested.connect(self.on_context_menu)
+                    action = self.popMenu.exec_(self.sum_input.mapToGlobal(event.pos()))
+                    
                     if action == google_search:
                         self.search(QApplication.clipboard().text())
                     elif action == patent_search:
-                        print("copy...")
-
-
+                        #self.search_btn.setVisible(True)
+                        self.search_out_label.setVisible(True)
+                        self.search_output.setVisible(True)
+                        text = QApplication.clipboard().text()
+                        output = find_term_show(global_claim,target,text)
+                        self.show_output(self.search_output, text,('\n\n').join(output))
+                        self.search(text)
+                        self.sum_input.moveCursor(QTextCursor.Right)
+                        QApplication.clipboard().clear()
+                    
             elif event.button() == QtCore.Qt.MiddleButton:
                 pass
         return QtCore.QObject.event(obj, event)
 
     def on_context_menu(self, point):
         # show context menu
-        return self.sum_input.mapToGlobal(point)
+        self.popMenu.exec_(self.sum_input.mapToGlobal(point))
 
-    def show_output(self, where, what):
+    def show_output(self, where, what1, what2):
         where.clear()
         where.insertPlainText("[검색 텍스트]")
-        where.append(what)
-        where.append("")
+        where.append(what1)
+        where.append("\n\n")
         where.insertPlainText("[검색 결과]")
+        where.append(what2)
         where.append("")
+
+    def on_context_menu(self, point):
+        # show context menu
+        self.popMenu.exec_(self.sum_input.mapToGlobal(point))
 
     def link(self, linkStr):
         QDesktopServices.openUrl(QUrl(linkStr))
 
 
     def summary(self):
+        global global_claim
+        global target
         QApplication.clipboard().clear()
 
         # 만약 선택영역이 있으면 복사가 될거야
@@ -105,23 +201,30 @@ class MyWindow(QMainWindow, form_class):
         if len(QApplication.clipboard().text()) == 0 :
             # 만약 클립보드에 아무것도 없으면 input 박스에 있는 텍스트 전체를 인풋으로 받아라
             text = self.sum_input.toPlainText()
-            self.show_output(self.sum_output, text)
+            target = text
+            _,_,abstract,_,claim,_ = find_similar(text)
+            global_claim = claim
+            self.show_output(self.sum_output, text, ('\n\n').join(abstract))
             self.clm_btn.setVisible(True)
             self.title_btn.setVisible(True)
             QApplication.clipboard().clear()
 
         else :
             # 선택영역을 인풋으로 받아라
-            self.search_btn.setVisible(True)
+            #self.search_btn.setVisible(True)
+            self.search_out_label.setVisible(True)
             self.search_output.setVisible(True)
             self.sum_input.setTextBackgroundColor(QColor(85, 170, 0))
             text = QApplication.clipboard().text()
-            self.show_output(self.search_output, text)
+            output = find_term_show(global_claim,target,text)
+            self.show_output(self.search_output, text, ('\n\n').join(output))
             self.search(text)
             self.sum_input.moveCursor(QTextCursor.Right)
             self.sum_input.setTextBackgroundColor(QColor(255, 255, 255))
             QApplication.clipboard().clear()
     def claim(self):
+        global global_claim
+        global target
         QApplication.clipboard().clear()
 
         # 만약 선택영역이 있으면 복사가 될거야
@@ -132,18 +235,23 @@ class MyWindow(QMainWindow, form_class):
 
             # 만약 클립보드에 아무것도 없으면 input 박스에 있는 텍스트 전체를 인풋으로 받아라
             text = self.clm_input.toPlainText()
-            self.show_output(self.clm_output, text)
+            target = text
+            print('global_claim: ',global_claim)
+            output = find_claim(global_claim,text)
+            self.show_output(self.clm_output, '아래를 참고하세요!',('\n\n').join(output))
             self.clm_btn.setVisible(True)
             self.title_btn.setVisible(True)
             QApplication.clipboard().clear()
 
         else:
             # 선택영역을 인풋으로 받아라
-            self.search_btn.setVisible(True)
+            #self.search_btn.setVisible(True)
+            self.search_out_label.setVisible(True)
             self.search_output.setVisible(True)
             self.clm_input.setTextBackgroundColor(QColor(255, 106, 101))
             text = QApplication.clipboard().text()
-            self.show_output(self.search_output, text)
+            output = find_term_show(global_claim,target,text)
+            self.show_output(self.search_output, text,('\n\n').join(output))
             self.search(text)
             self.clm_input.moveCursor(QTextCursor.Right)
             self.clm_input.setTextBackgroundColor(QColor(255, 255, 255))
@@ -151,9 +259,9 @@ class MyWindow(QMainWindow, form_class):
 
     def search(self, keyword):
         # google search
-        self.search_hyperlink.setVisible(True)
+        #self.search_hyperlink.setVisible(True)
         self.search_keyword = keyword
-        self.search_hyperlink.setText('<a href="http://www.google.com/search?q='+ self.search_keyword +'">"'+ self.search_keyword +'" Google 검색</a>')
+        #self.search_hyperlink.setText('<a href="http://www.google.com/search?q='+ self.search_keyword +'">"'+ self.search_keyword +'" Google 검색</a>')
 
     def reset(self):
         clm_original = self.clm_input.toPlainText()
