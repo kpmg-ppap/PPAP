@@ -118,8 +118,9 @@ Python 실행
 ```
 
 ## UI
+* PPAP.qrc
 * PPAP_rc.py
-* PPAP_UI.py
+* PPAP_UI.ui
 ```
 # 실제 UI 실행 코드
 > python PPAP.py
