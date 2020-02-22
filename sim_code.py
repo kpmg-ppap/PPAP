@@ -236,3 +236,27 @@ def find_claim(source,target):
         target_target.append(['----------------\n'+target_claims[i]+'\n is similar to: '])
         target_target.append(find_one_claim(source_claims_list,target_claims[i]))     
     return sum(target_target,[])
+
+def find_term_show(source,target,term,num_cand=5):
+    '''
+    Input: a list of DB claims, and a term in search
+    Output: a n-best list of the windows in the claims that contain the term
+    '''
+    source_claims_list = ' '.join(source).split('청구항')
+    count = 0
+    for i in range(len(source_claims_list)):
+        if len(source_claims_list[count]) < 10:
+            source_claims_list.pop(count)
+            count -= 1
+        count +=1    
+    res = []
+    scores = []
+    for i in range(len(source_claims_list)):
+        if term in source_claims_list[i]:
+            start  = source_claims_list[i].find(term)
+            window = '... ' + source_claims_list[i][int(np.maximum(start - 15,0)):int(np.minimum(start + len(term) + 15, len(source_claims_list[i])-1))] + ' ...'
+            res.append(window)
+            scores.append(compare_document(source_claims_list[i],target)[0])
+    arg_scores = np.argsort(scores)
+    cands      = [res[int(z)] for z in arg_scores[-num_cand:]]
+    return cands
