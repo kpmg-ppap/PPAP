@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>687</height>
+    <height>690</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -594,9 +594,9 @@ font: 11pt &quot;나눔고딕&quot;;</string>
    <property name="geometry">
     <rect>
      <x>910</x>
-     <y>660</y>
+     <y>661</y>
      <width>361</width>
-     <height>31</height>
+     <height>27</height>
     </rect>
    </property>
    <property name="baseSize">
@@ -754,7 +754,7 @@ font: 11pt &quot;나눔고딕&quot;;</string>
     <string notr="true"/>
    </property>
    <property name="text">
-    <string>표현/내용 검색 리셋</string>
+    <string>특허/청구항 검색 결과 리셋</string>
    </property>
   </widget>
   <widget class="QPushButton" name="title_btn">
@@ -1182,7 +1182,7 @@ color: rgb(0, 0, 0);</string>
     <rect>
      <x>130</x>
      <y>120</y>
-     <width>461</width>
+     <width>511</width>
      <height>21</height>
     </rect>
    </property>
