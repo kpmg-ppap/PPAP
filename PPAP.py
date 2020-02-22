@@ -12,7 +12,7 @@ from sample import find_similar
 from sim_code import find_claim
 from sim_code import find_term_show
 
-#UI파일은 Python 코드 파일과 같은 디렉토리에 위치
+# UI파일은 Python 코드 파일과 같은 디렉토리에 위치
 form_class = uic.loadUiType("PPAP_UI.ui")[0]
 global_claim = []
 
@@ -192,11 +192,11 @@ class MyWindow(QMainWindow, form_class):
         global target
         QApplication.clipboard().clear()
 
-        # 만약 선택영역이 있으면 복사가 될거야
+        # 만약 선택영역이 있으면 복사 가능
         self.sum_input.copy()
 
         if len(QApplication.clipboard().text()) == 0 :
-            # 만약 클립보드에 아무것도 없으면 input 박스에 있는 텍스트 전체를 인풋으로 받아라
+            # 만약 클립보드에 아무것도 없으면 input 박스에 있는 텍스트 전체를 인풋으로 받음
             text = self.sum_input.toPlainText()
             target = text
             _,_,abstract,_,claim,_ = find_similar(text)
@@ -207,7 +207,7 @@ class MyWindow(QMainWindow, form_class):
             QApplication.clipboard().clear()
 
         else :
-            # 선택영역을 인풋으로 받아라
+            # 선택영역을 인풋으로 받음
             #self.search_btn.setVisible(True)
             self.search_out_label.setVisible(True)
             self.search_output.setVisible(True)
@@ -223,13 +223,13 @@ class MyWindow(QMainWindow, form_class):
         global target
         QApplication.clipboard().clear()
 
-        # 만약 선택영역이 있으면 복사가 될거야
+        # 만약 선택영역이 있으면 복사 가능
         self.clm_input.copy()
 
         if len(QApplication.clipboard().text()) == 0:
 
 
-            # 만약 클립보드에 아무것도 없으면 input 박스에 있는 텍스트 전체를 인풋으로 받아라
+            # 만약 클립보드에 아무것도 없으면 input 박스에 있는 텍스트 전체를 인풋으로 받음
             text = self.clm_input.toPlainText()
             target = text
             print('global_claim: ',global_claim)
