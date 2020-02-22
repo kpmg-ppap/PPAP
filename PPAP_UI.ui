@@ -416,9 +416,9 @@ font: 11pt &quot;나눔고딕&quot;;</string>
   <widget class="QPushButton" name="search_btn">
    <property name="geometry">
     <rect>
-     <x>910</x>
+     <x>1090</x>
      <y>0</y>
-     <width>361</width>
+     <width>181</width>
      <height>31</height>
     </rect>
    </property>
@@ -1046,7 +1046,7 @@ color: rgb(103, 103, 103);</string>
      <x>70</x>
      <y>31</y>
      <width>691</width>
-     <height>150</height>
+     <height>91</height>
     </rect>
    </property>
   </widget>
@@ -1067,7 +1067,8 @@ color: rgb(103, 103, 103);</string>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-color: rgb(0, 0, 0);</string>
+    <string notr="true">border-color: rgb(0, 0, 0);
+color: rgb(0, 0, 0);</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::Box</enum>
@@ -1181,7 +1182,7 @@ color: rgb(103, 103, 103);</string>
     <rect>
      <x>130</x>
      <y>120</y>
-     <width>341</width>
+     <width>461</width>
      <height>21</height>
     </rect>
    </property>
@@ -1193,15 +1194,15 @@ color: rgb(103, 103, 103);</string>
     </font>
    </property>
    <property name="text">
-    <string>(드래그 -&gt; 검색하면 특정 단어에 대한 해설을 볼 수 있습니다)</string>
+    <string>(드래그 -&gt; 우클릭 메뉴를 통해 특정 단어, 구문에 대한 정보를 검색할 수 있습니다)</string>
    </property>
   </widget>
   <widget class="QLabel" name="search_hyperlink">
    <property name="geometry">
     <rect>
-     <x>910</x>
+     <x>1099</x>
      <y>1</y>
-     <width>360</width>
+     <width>171</width>
      <height>31</height>
     </rect>
    </property>
@@ -1210,6 +1211,26 @@ color: rgb(103, 103, 103);</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="search_out_label">
+   <property name="geometry">
+    <rect>
+     <x>910</x>
+     <y>10</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Nanum Gothic</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>용례 검색 결과</string>
    </property>
   </widget>
   <zorder>search_output</zorder>
@@ -1231,6 +1252,7 @@ color: rgb(103, 103, 103);</string>
   <zorder>sum_label_2</zorder>
   <zorder>title_list</zorder>
   <zorder>search_hyperlink</zorder>
+  <zorder>search_out_label</zorder>
  </widget>
  <resources>
   <include location="PPAP.qrc"/>
