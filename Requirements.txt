@@ -108,7 +108,7 @@ pybind11==2.4.3
 pycparser==2.19
 pydot==1.4.1
 pydotplus==2.0.2
-Pygments==2.4.2
+Pygments==2.7.4
 pyparsing==2.4.2
 pyrsistent==0.14.11
 pytest==5.3.1
