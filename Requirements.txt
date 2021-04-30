@@ -167,7 +167,7 @@ traitlets==4.3.2
 transformers==2.1.1
 typing==3.7.4.1
 Unidecode==1.1.1
-urllib3==1.25.7
+urllib3==1.25.8
 wasabi==0.4.2
 wcwidth==0.1.7
 webencodings==0.5.1
