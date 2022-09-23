@@ -98,7 +98,7 @@ preshed==2.0.1
 prometheus-client==0.7.1
 promise==2.3
 prompt-toolkit==2.0.9
-protobuf==3.9.1
+protobuf==3.18.3
 ptyprocess==0.6.0
 py==1.8.0
 py-rouge==1.1
